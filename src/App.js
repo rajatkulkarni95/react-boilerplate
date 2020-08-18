@@ -1,26 +1,23 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { ThemeProvider } from "styled-components";
+import { GlobalStyle } from "./components/GlobalStyle";
+import { themes } from "./theme";
+import { Header } from "./components/Header";
+import { useLocalStorage } from "./hooks";
 
-function App() {
+const App = () => {
+  const [storedTheme, setStoredTheme] = useLocalStorage();
+
+  const themeToggler = () => {
+    storedTheme === "light" ? setStoredTheme("dark") : setStoredTheme("light");
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <ThemeProvider theme={storedTheme === "light" ? themes.light : themes.dark}>
+      <GlobalStyle />
+      <Header handleClick={themeToggler} currentTheme={storedTheme} />
+    </ThemeProvider>
   );
-}
+};
 
 export default App;
